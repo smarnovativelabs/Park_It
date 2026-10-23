@@ -105,9 +105,13 @@ namespace ParkIt
             toastText = refs.toastText;
         }
 
-        public void CloseLevelSelect() => levelSelectRoot?.SetActive(false);
-        public void CloseHelp() => helpRoot?.SetActive(false);
-        public void OpenHelp() => helpRoot?.SetActive(true);
+        public void CloseLevelSelect() => UIPopupTransition.Hide(levelSelectRoot);
+        public void CloseHelp() => UIPopupTransition.Hide(helpRoot);
+        public void OpenHelp()
+        {
+            ClosePause();
+            UIPopupTransition.Show(helpRoot);
+        }
 
         // ---------- title ----------
         private void BuildTitle()
@@ -157,14 +161,15 @@ namespace ParkIt
         // ---------- level select ----------
         public void OpenLevelSelect()
         {
-            if (helpRoot != null) helpRoot.SetActive(false);
+            ClosePause();
+            CloseHelp();
             if (levelCards.Count == 0 && levelGridContent != null)
             {
                 var levels = GameManager.Instance != null && GameManager.Instance.Levels.Count > 0 ? GameManager.Instance.Levels : (IReadOnlyList<LevelData>)LevelCatalog.CreateLevels();
                 for (int k = 0; k < levels.Count; k++) levelCards.Add(BuildLevelCard(levels[k], k));
             }
             RefreshLevelSelect();
-            if (levelSelectRoot != null) levelSelectRoot.SetActive(true);
+            UIPopupTransition.Show(levelSelectRoot);
         }
 
         private void BuildLevelSelect()
@@ -172,7 +177,7 @@ namespace ParkIt
             var root = UIKit.Rect("LevelSelect", modalLayer);
             UIKit.Stretch(root);
             levelSelectRoot = root.gameObject;
-            UIKit.Dimmer(root, () => levelSelectRoot.SetActive(false));
+            UIKit.Dimmer(root, CloseLevelSelect);
 
             var panel = UIKit.Img("Panel", root, "panel_modal", null, true);
             levelSelectPanel = panel.rectTransform;
@@ -185,7 +190,7 @@ namespace ParkIt
             UIKit.Icon(header, "icon_trophy", UIKit.Amber, 46);
             UIKit.Bold(header, "Select Level", 42, UIKit.Ink).horizontalOverflow = HorizontalWrapMode.Overflow;
             UIKit.Size(UIKit.Rect("Flex", header), -1, -1, 1);
-            var close = UIKit.IconButton("Close", header, "btn_close", "icon_close", Color.white, 70, 38, () => levelSelectRoot.SetActive(false));
+            var close = UIKit.IconButton("Close", header, "btn_close", "icon_close", Color.white, 70, 38, CloseLevelSelect);
             close.targetGraphic.color = Color.white;
 
             var scroll = BuildScroll(panel.transform, out levelGridContent);
@@ -248,7 +253,7 @@ namespace ParkIt
             var b = UIKit.Button($"Level_{level.levelIndex}", levelGridContent, "dock_utility", () =>
             {
                 if (GameManager.Instance == null || !GameManager.Instance.IsLevelUnlocked(index)) return;
-                levelSelectRoot.SetActive(false);
+                CloseLevelSelect();
                 ShowTitle(false);
                 GameManager.Instance?.LoadLevel(index);
             });
@@ -311,7 +316,7 @@ namespace ParkIt
             var root = UIKit.Rect("Help", modalLayer);
             UIKit.Stretch(root);
             helpRoot = root.gameObject;
-            UIKit.Dimmer(root, () => helpRoot.SetActive(false));
+            UIKit.Dimmer(root, CloseHelp);
 
             var panel = UIKit.Img("Panel", root, "panel_modal", null, true);
             UIKit.Place(panel.rectTransform, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(940, 0));
@@ -329,7 +334,7 @@ namespace ParkIt
             HelpRow(panel.transform, "icon_obstacle", UIKit.Rose, "<b>Fire hydrants</b> block tiles. Shift nodes nudge you diagonally forward.");
             HelpRow(panel.transform, "icon_keyboard", UIKit.TextSoft, "W/↑ Drive · S/↓ Reverse · A/← Left · D/→ Right · Q/E Shift · U Undo · R Restart · C Camera · Z Zen");
 
-            UIKit.IconTextButton("GotIt", panel.transform, "btn_primary", "icon_check_circle", UIKit.Ink, "Got it!", UIKit.Ink, 30, 96, () => helpRoot.SetActive(false), 34);
+            UIKit.IconTextButton("GotIt", panel.transform, "btn_primary", "icon_check_circle", UIKit.Ink, "Got it!", UIKit.Ink, 30, 96, CloseHelp, 34);
             if (helpRoot != null) helpRoot.SetActive(false);
             if (levelCards.Count == 0 && levelGridContent != null)
             {
@@ -356,7 +361,7 @@ namespace ParkIt
         {
             if (pauseRoot == null) return;
             RefreshPause();
-            pauseRoot.SetActive(true);
+            UIPopupTransition.Show(pauseRoot);
             Time.timeScale = 0f;
         }
 
@@ -370,7 +375,7 @@ namespace ParkIt
         public void ClosePause()
         {
             if (pauseRoot == null) return;
-            pauseRoot.SetActive(false);
+            UIPopupTransition.Hide(pauseRoot);
             Time.timeScale = 1f;
         }
 

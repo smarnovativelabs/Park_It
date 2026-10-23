@@ -47,6 +47,18 @@ namespace ParkIt
             if (refs == null) return;
 
             ParkItUIBuilder.ResolveBindings(refs);
+            ParkItUIBuilder.EnsureHintButton(refs);
+            ParkItUIBuilder.EnsureShiftControls(refs);
+            UITapFeedback.Attach(refs.hintButton);
+            UITapFeedback.Attach(refs.shiftLeftBtn);
+            UITapFeedback.Attach(refs.shiftRightBtn);
+            if (refs.hintButton != null)
+            {
+                refs.hintButton.onClick.RemoveAllListeners();
+                refs.hintButton.onClick.AddListener(ShowLevelHint);
+            }
+            hintUndoButton = refs.undoButton;
+            hintRestartButton = refs.restartButton;
             levelCard = refs.levelCard;
             levelNumberText = refs.levelNumberText;
             levelTitleText = refs.levelTitleText;
@@ -135,6 +147,8 @@ namespace ParkIt
             }
 
             driveButtons.Clear();
+            BindDriveButton(MoveType.ShiftLeft, refs.shiftLeftBtn, refs.shiftLeftBg, refs.shiftLeftRing, "dock_cyan", OnClickShiftLeft);
+            BindDriveButton(MoveType.ShiftRight, refs.shiftRightBtn, refs.shiftRightBg, refs.shiftRightRing, "dock_cyan", OnClickShiftRight);
             BindDriveButton(MoveType.Forward, refs.forwardBtn, refs.forwardBg, refs.forwardRing, "dock_drive", OnClickDrive);
             BindDriveButton(MoveType.TurnLeft, refs.turnLeftBtn, refs.turnLeftBg, refs.turnLeftRing, "dock_yellow", OnClickTurnLeft);
             BindDriveButton(MoveType.TurnRight, refs.turnRightBtn, refs.turnRightBg, refs.turnRightRing, "dock_yellow", OnClickTurnRight);
@@ -179,7 +193,7 @@ namespace ParkIt
             UIKit.Size(subPill, 240, 48);
             UIKit.Layout(subPill, false, 0, new RectOffset(16, 16, 2, 2), TextAnchor.MiddleCenter);
             levelTitleText = UIKit.Bold(subPill.transform, "First Gear", 28, UIKit.Ink, TextAnchor.MiddleCenter);
-            levelTitleText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            UIKit.FitLevelTitle(levelTitleText);
 
             // ---- top-right cluster ----
             topRight = UIKit.Rect("TopRight", hudLayer);

@@ -35,6 +35,11 @@ namespace ParkIt
         public RectTransform toolbar;
         public Button levelDesignButton;
         public Button pauseButton;
+        public Button hintButton;
+        public UnityEngine.UI.Image hintIcon;
+        public Button hintMoveButton;
+        public GameObject hintPanel;
+        public Text hintText;
         public RectTransform targetPill;
         public Text targetHeadingText;
         public Image targetArrow;
@@ -64,6 +69,8 @@ namespace ParkIt
         public Image zenIcon;
 
         [Header("HUD - Drive Buttons")]
+        public Button shiftLeftBtn, shiftRightBtn;
+        public Image shiftLeftBg, shiftRightBg, shiftLeftRing, shiftRightRing;
         public Button forwardBtn;
         public Image forwardBg;
         public Image forwardRing;

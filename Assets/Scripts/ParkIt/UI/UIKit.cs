@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -7,6 +7,28 @@ namespace ParkIt
     /// <summary>Theme colours and widget builders. Every graphic is a sprite from <see cref="UISpriteAtlas"/>.</summary>
     public static class UIKit
     {
+        /// <summary>Keep the HUD subtitle inside its pill, independent of text preferred width.</summary>
+        public static void FitLevelTitle(UnityEngine.UI.Text text)
+        {
+            text.resizeTextForBestFit = true;
+            text.resizeTextMinSize = 24;
+            text.resizeTextMaxSize = Mathf.Max(24, text.fontSize);
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.verticalOverflow = VerticalWrapMode.Truncate;
+            text.alignment = TextAnchor.MiddleLeft;
+            var clip = text.transform.parent.GetComponent<UnityEngine.UI.RectMask2D>();
+            if (clip == null)
+                clip = text.transform.parent.gameObject.AddComponent<UnityEngine.UI.RectMask2D>();
+            clip.padding = new Vector4(18, 10, 18, 10);
+            var layout = text.GetComponent<UnityEngine.UI.LayoutElement>();
+            if (layout == null) layout = text.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+            layout.ignoreLayout = true;
+            var rect = text.rectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = new Vector2(18, 10);
+            rect.offsetMax = new Vector2(-18, -10);
+        }
         // ---------- theme ----------
         public static readonly Color White = Color.white;
         public static readonly Color Ink = C("#350c5c");
@@ -177,7 +199,7 @@ namespace ParkIt
             nav.mode = Navigation.Mode.None;
             b.navigation = nav;
             if (onClick != null) b.onClick.AddListener(onClick);
-            b.onClick.AddListener(() => SfxPlayer.Play(Sfx.Click));
+            if (Application.isPlaying) UITapFeedback.Attach(b);
             return b;
         }
 

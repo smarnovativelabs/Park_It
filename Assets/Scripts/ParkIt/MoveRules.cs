@@ -66,10 +66,17 @@ namespace ParkIt
 
         public static Result Solve(LevelData level, int moveLimit = 64)
         {
-            var result = new Result { solvable = false, moves = -1, path = new List<MoveType>() };
-            if (level == null || level.IsBlocked(level.startCoord) || level.IsBlocked(level.targetCoord)) return result;
+            return SolveFrom(level, level != null ? level.startCoord : Vector2Int.zero,
+                level != null ? level.startDirection : Direction.North, moveLimit);
+        }
 
-            var startKey = (level.startCoord, level.startDirection);
+        public static Result SolveFrom(LevelData level, Vector2Int start, Direction heading,
+            int moveLimit = 64, bool allowShifts = true)
+        {
+            var result = new Result { solvable = false, moves = -1, path = new List<MoveType>() };
+            if (level == null || level.IsBlocked(start) || level.IsBlocked(level.targetCoord)) return result;
+
+            var startKey = (start, heading);
             var parent = new Dictionary<(Vector2Int, Direction), ((Vector2Int, Direction) from, MoveType move)>();
             var depth = new Dictionary<(Vector2Int, Direction), int> { [startKey] = 0 };
             var queue = new Queue<(Vector2Int, Direction)>();
@@ -94,6 +101,7 @@ namespace ParkIt
 
                 foreach (var move in MoveRules.GetLegalMoves(level, state.Item1, state.Item2))
                 {
+                    if (!allowShifts && (move.moveType == MoveType.ShiftLeft || move.moveType == MoveType.ShiftRight)) continue;
                     var next = (move.destination, move.resultingDirection);
                     if (depth.ContainsKey(next)) continue;
                     depth[next] = depth[state] + 1;

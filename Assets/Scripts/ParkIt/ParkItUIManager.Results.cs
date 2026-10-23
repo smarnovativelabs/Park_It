@@ -159,7 +159,7 @@ namespace ParkIt
             bool custom = GameManager.Instance != null && GameManager.Instance.IsPlayingCustom;
             victoryNextLabel.text = custom ? "Back to Level Creator" : "Next Puzzle Level";
             RefreshLevelSelect();
-            victoryRoot.SetActive(true);
+            UIPopupTransition.Show(victoryRoot);
         }
 
         private void PopulateDefeat()
@@ -167,7 +167,7 @@ namespace ParkIt
             int undo = UndoManager.Instance != null ? UndoManager.Instance.UndoCount : 0;
             rewindLabel.text = $"Rewind Last Move ({undo} left)";
             rewindButton.interactable = undo > 0;
-            defeatRoot.SetActive(true);
+            UIPopupTransition.Show(defeatRoot);
         }
     }
 }

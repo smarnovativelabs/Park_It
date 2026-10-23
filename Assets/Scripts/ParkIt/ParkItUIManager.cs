@@ -62,6 +62,7 @@ namespace ParkIt
             {
                 carController.OnFuelChanged += UpdateFuelDisplay;
                 carController.OnStateChanged += RefreshHUD;
+                carController.OnStateChanged += ClearHintAction;
                 carController.OnLevelWon += ShowVictory;
                 carController.OnLevelLost += ShowDefeat;
             }
@@ -75,6 +76,7 @@ namespace ParkIt
             {
                 carController.OnFuelChanged -= UpdateFuelDisplay;
                 carController.OnStateChanged -= RefreshHUD;
+                carController.OnStateChanged -= ClearHintAction;
                 carController.OnLevelWon -= ShowVictory;
                 carController.OnLevelLost -= ShowDefeat;
             }
@@ -113,6 +115,13 @@ namespace ParkIt
                 refs.levelCreator = creator;
             }
 
+            foreach (var button in refs.GetComponentsInChildren<UnityEngine.UI.Button>(true))
+            {
+                if (button.name == "Backdrop") continue;
+                UITapFeedback.Attach(button);
+                button.GetComponent<UITapFeedback>().PlayTapSound =
+                    button != refs.hintButton && button != refs.shiftLeftBtn && button != refs.shiftRightBtn;
+            }
             ApplyLayout(true);
         }
 
@@ -158,11 +167,16 @@ namespace ParkIt
 
         // ---------- state ----------
         public bool AnyModalOpen => levelSelectRoot.activeSelf || helpRoot.activeSelf || victoryRoot.activeSelf || defeatRoot.activeSelf
-            || (creator != null && creator.IsOpen);
+            || (pauseRoot != null && pauseRoot.activeSelf) || (creator != null && creator.IsOpen);
         public bool TitleVisible => titleRoot.activeSelf;
 
         public void SetupLevelUI(LevelData level)
         {
+            ClearHintAction();
+            CloseHelp();
+            CloseLevelSelect();
+            ClosePause();
+            creator?.Close();
             if (resultRoutine != null) { StopCoroutine(resultRoutine); resultRoutine = null; }
             HideResults();
             levelNumberText.text = level.difficulty == LevelDifficulty.Custom ? "CUSTOM" : $"LEVEL {level.levelIndex}";
@@ -177,14 +191,16 @@ namespace ParkIt
 
         public void HideResults()
         {
-            if (victoryRoot != null) victoryRoot.SetActive(false);
-            if (defeatRoot != null) defeatRoot.SetActive(false);
+            UIPopupTransition.Hide(victoryRoot);
+            UIPopupTransition.Hide(defeatRoot);
         }
 
         private LevelData CurrentLevel => GameManager.Instance != null ? GameManager.Instance.CurrentLevelData : null;
 
         // ---------- actions ----------
         public void OnClickDrive() => ExecuteMoveType(MoveType.Forward);
+        public void OnClickShiftLeft() => ExecuteMoveType(MoveType.ShiftLeft);
+        public void OnClickShiftRight() => ExecuteMoveType(MoveType.ShiftRight);
         public void OnClickReverse() => ExecuteMoveType(MoveType.Reverse);
         public void OnClickTurnLeft() => ExecuteMoveType(MoveType.TurnLeft);
         public void OnClickTurnRight() => ExecuteMoveType(MoveType.TurnRight);
@@ -205,6 +221,7 @@ namespace ParkIt
             {
                 if (m.moveType != type) continue;
                 FlashDriveButton(type);
+                if (type == MoveType.ShiftLeft || type == MoveType.ShiftRight) SfxPlayer.Play(Sfx.ShiftTap);
                 carController.ExecuteMove(m);
                 return;
             }
@@ -212,7 +229,10 @@ namespace ParkIt
 
         public void StartGame()
         {
+            bool enteringFromTitle = TitleVisible;
             ShowTitle(false);
+            if (enteringFromTitle && carController != null && !carController.IsBusy && !carController.IsLevelComplete)
+                carController.GetComponent<CarVisuals>()?.PlayLanding();
         }
 
         public void ShowTitle(bool show)
@@ -224,8 +244,9 @@ namespace ParkIt
 
         public void OpenCreator()
         {
-            levelSelectRoot.SetActive(false);
-            helpRoot.SetActive(false);
+            ClosePause();
+            CloseLevelSelect();
+            CloseHelp();
             HideResults();
             creator.Open(CurrentLevel);
         }
@@ -262,14 +283,14 @@ namespace ParkIt
             }
             if (TitleVisible)
             {
-                if (levelSelectRoot.activeSelf) { if (Input.GetKeyDown(KeyCode.Escape)) levelSelectRoot.SetActive(false); return; }
+                if (levelSelectRoot.activeSelf) { if (Input.GetKeyDown(KeyCode.Escape)) CloseLevelSelect(); return; }
                 if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) StartGame();
                 return;
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (levelSelectRoot.activeSelf) levelSelectRoot.SetActive(false);
-                else if (helpRoot.activeSelf) helpRoot.SetActive(false);
+                if (levelSelectRoot.activeSelf) CloseLevelSelect();
+                else if (helpRoot.activeSelf) CloseHelp();
                 return;
             }
             if (victoryRoot.activeSelf && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))) { OnClickNextLevel(); return; }
@@ -302,7 +323,7 @@ namespace ParkIt
 
         private IEnumerator ShowResultDelayed(bool won)
         {
-            yield return new WaitForSeconds(.45f);
+            yield return new WaitForSeconds((won ? CarVisuals.VictoryAnimationDuration : CarVisuals.GameOverAnimationDuration) + .1f);
             resultRoutine = null;
             if (carController == null || !carController.IsLevelComplete) yield break;
             if (won) PopulateVictory(); else PopulateDefeat();

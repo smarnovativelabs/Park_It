@@ -9,6 +9,87 @@ namespace ParkIt
         private static Mesh triangleArrow;
         private static Mesh stemArrow;
         private static Mesh oilPuddle;
+        private static Mesh creamCorner;
+        private static readonly Dictionary<float, Mesh> creamStraights = new Dictionary<float, Mesh>();
+
+        // Same profile and normals as CreamCorner, with flush ends rather than
+        // rounded end caps that leave a notch at each connection.
+        public static GameObject CreamStraight(string name, Transform parent, Vector3 center, float length, float yaw, Material material)
+        {
+            if (!creamStraights.TryGetValue(length, out var mesh) || mesh == null)
+            {
+                const int section = 24;
+                var vertices = new List<Vector3>();
+                var normals = new List<Vector3>();
+                var triangles = new List<int>();
+                for (int end = 0; end < 2; end++)
+                    for (int corner = 0; corner < 4; corner++)
+                    {
+                        float cx = corner == 0 || corner == 3 ? .16f : -.16f;
+                        float cy = corner < 2 ? .02f : -.02f;
+                        for (int j = 0; j < 6; j++)
+                        {
+                            float a = (corner * 90f + j * 18f) * Mathf.Deg2Rad;
+                            vertices.Add(new Vector3(cx + Mathf.Cos(a) * .20f, cy + Mathf.Sin(a) * .20f, (end - .5f) * length));
+                            normals.Add(new Vector3(Mathf.Cos(a), Mathf.Sin(a), 0));
+                        }
+                    }
+                for (int j = 0; j < section; j++)
+                {
+                    int a = j, b = (j + 1) % section, c = b + section, d = a + section;
+                    triangles.Add(a); triangles.Add(b); triangles.Add(c);
+                    triangles.Add(a); triangles.Add(c); triangles.Add(d);
+                }
+                mesh = new Mesh { name = "Cream_Curb_Flush_Straight" };
+                mesh.SetVertices(vertices); mesh.SetNormals(normals);
+                mesh.SetTriangles(triangles, 0); mesh.RecalculateBounds();
+                creamStraights[length] = mesh;
+            }
+            return MeshObject(name, parent, mesh, material, center, yaw, Vector3.one);
+        }
+
+        /// <summary>Continuous quarter-turn curb, with a rounded rectangular cross section.</summary>
+        public static GameObject CreamCorner(string name, Transform parent, Vector3 center, float yaw, Material material)
+        {
+            if (creamCorner == null)
+            {
+                const int steps = 24, section = 24;
+                var vertices = new List<Vector3>();
+                var normals = new List<Vector3>();
+                var triangles = new List<int>();
+                for (int i = 0; i <= steps; i++)
+                {
+                    float angle = i * Mathf.PI * .5f / steps;
+                    var radial = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle));
+                    for (int corner = 0; corner < 4; corner++)
+                    {
+                        float cx = corner == 0 || corner == 3 ? .16f : -.16f;
+                        float cy = corner < 2 ? .02f : -.02f;
+                        for (int j = 0; j < 6; j++)
+                        {
+                            float a = (corner * 90f + j * 18f) * Mathf.Deg2Rad;
+                            float x = cx + Mathf.Cos(a) * .20f;
+                            float y = cy + Mathf.Sin(a) * .20f;
+                            vertices.Add(radial * (1f + x) + Vector3.up * y);
+                            normals.Add(radial * Mathf.Cos(a) + Vector3.up * Mathf.Sin(a));
+                        }
+                    }
+                }
+                for (int i = 0; i < steps; i++)
+                    for (int j = 0; j < section; j++)
+                    {
+                        int a = i * section + j, b = i * section + (j + 1) % section;
+                        int c = b + section, d = a + section;
+                        bool flip = Vector3.Dot(Vector3.Cross(vertices[b] - vertices[a], vertices[c] - vertices[a]), normals[a] + normals[b]) < 0;
+                        triangles.Add(a); triangles.Add(flip ? c : b); triangles.Add(flip ? b : c);
+                        triangles.Add(a); triangles.Add(flip ? d : c); triangles.Add(flip ? c : d);
+                    }
+                creamCorner = new Mesh { name = "Cream_Curb_Quarter_Turn" };
+                creamCorner.SetVertices(vertices); creamCorner.SetNormals(normals);
+                creamCorner.SetTriangles(triangles, 0); creamCorner.RecalculateBounds();
+            }
+            return MeshObject(name, parent, creamCorner, material, center, yaw, Vector3.one);
+        }
         private static readonly Dictionary<(Vector3, float, float), Mesh> roundedBlocks = new Dictionary<(Vector3, float, float), Mesh>();
 
         /// <summary>Low-poly rounded slab with a bevel catching the light along its top edge.</summary>

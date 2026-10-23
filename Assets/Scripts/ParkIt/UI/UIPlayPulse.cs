@@ -20,9 +20,14 @@ namespace ParkIt
         {
             elapsed = (elapsed + Time.unscaledDeltaTime) % Mathf.Max(.1f, period);
             float pulse = .5f - .5f * Mathf.Cos(elapsed * Mathf.PI * 2f / Mathf.Max(.1f, period));
-            transform.localScale = restScale * (1f + amount * pulse);
+            if (TryGetComponent<UITapFeedback>(out var feedback)) feedback.SetHintPulse(1f + amount * pulse);
+            else transform.localScale = restScale * (1f + amount * pulse);
         }
 
-        private void OnDisable() => transform.localScale = restScale;
+        private void OnDisable()
+        {
+            if (TryGetComponent<UITapFeedback>(out var feedback)) feedback.SetHintPulse(1f);
+            else transform.localScale = restScale;
+        }
     }
 }

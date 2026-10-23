@@ -341,14 +341,14 @@ namespace ParkIt
         {
             BindExistingHierarchy();
             if (draft == null) draft = LoadDraft() ?? FromLevel(current);
-            gameObject.SetActive(true);
+            UIPopupTransition.Show(gameObject);
             transform.SetAsLastSibling();
             RebuildGrid();
             Changed(false);
             RefreshBrushes();
         }
 
-        public void Close() => gameObject.SetActive(false);
+        public void Close() => UIPopupTransition.Hide(gameObject);
 
         public void ApplyLayout(bool isPortrait)
         {

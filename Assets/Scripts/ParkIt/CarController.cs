@@ -44,6 +44,7 @@ namespace ParkIt
 
         public void InitializeCar(LevelData level)
         {
+            SfxPlayer.StopAll();
             if (carVisuals != null) carVisuals.CancelMove();
             IsLevelComplete = false;
             currentCoord = level.startCoord;
@@ -56,7 +57,7 @@ namespace ParkIt
 
             if (carVisuals != null)
             {
-                carVisuals.ResetSuspension();
+                carVisuals.PlayLanding();
             }
 
             OnFuelChanged?.Invoke(remainingFuel);
@@ -65,6 +66,8 @@ namespace ParkIt
 
         public void RestoreState(Vector2Int coord, Direction direction, int fuel)
         {
+            SfxPlayer.StopAll();
+            if (carVisuals != null) carVisuals.ClearColorSparkles();
             if (carVisuals != null) carVisuals.CancelMove();
             IsBusy = false;
             IsLevelComplete = false;
@@ -142,12 +145,14 @@ namespace ParkIt
             if (level.IsTarget(currentCoord, currentDirection))
             {
                 IsLevelComplete = true;
+                carVisuals?.PlayVictory();
                 OnStateChanged?.Invoke();
                 OnLevelWon?.Invoke();
             }
             else if (remainingFuel <= 0)
             {
                 IsLevelComplete = true;
+                carVisuals?.PlayGameOver();
                 OnStateChanged?.Invoke();
                 OnLevelLost?.Invoke();
             }

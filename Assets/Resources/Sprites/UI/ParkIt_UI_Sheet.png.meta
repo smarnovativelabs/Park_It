@@ -113,7 +113,7 @@ TextureImporter:
       name: panel_modal
       rect:
         serializedVersion: 2
-        x: 400
+        x: 796
         y: 288
         width: 128
         height: 128
@@ -135,7 +135,7 @@ TextureImporter:
       name: panel_hud
       rect:
         serializedVersion: 2
-        x: 204
+        x: 604
         y: 188
         width: 96
         height: 96
@@ -157,7 +157,7 @@ TextureImporter:
       name: panel_inset
       rect:
         serializedVersion: 2
-        x: 304
+        x: 704
         y: 188
         width: 96
         height: 96
@@ -179,7 +179,7 @@ TextureImporter:
       name: panel_section
       rect:
         serializedVersion: 2
-        x: 404
+        x: 804
         y: 188
         width: 96
         height: 96
@@ -201,8 +201,8 @@ TextureImporter:
       name: card_level
       rect:
         serializedVersion: 2
-        x: 1764
-        y: 320
+        x: 204
+        y: 188
         width: 96
         height: 96
       alignment: 0
@@ -223,8 +223,8 @@ TextureImporter:
       name: card_level_hover
       rect:
         serializedVersion: 2
-        x: 1864
-        y: 320
+        x: 304
+        y: 188
         width: 96
         height: 96
       alignment: 0
@@ -245,7 +245,7 @@ TextureImporter:
       name: card_level_selected
       rect:
         serializedVersion: 2
-        x: 4
+        x: 404
         y: 188
         width: 96
         height: 96
@@ -267,7 +267,7 @@ TextureImporter:
       name: grid_frame
       rect:
         serializedVersion: 2
-        x: 104
+        x: 504
         y: 188
         width: 96
         height: 96
@@ -289,7 +289,7 @@ TextureImporter:
       name: btn_primary
       rect:
         serializedVersion: 2
-        x: 1364
+        x: 1760
         y: 320
         width: 96
         height: 96
@@ -311,8 +311,8 @@ TextureImporter:
       name: btn_secondary
       rect:
         serializedVersion: 2
-        x: 1564
-        y: 320
+        x: 4
+        y: 188
         width: 96
         height: 96
       alignment: 0
@@ -333,7 +333,7 @@ TextureImporter:
       name: btn_dark
       rect:
         serializedVersion: 2
-        x: 964
+        x: 1360
         y: 320
         width: 96
         height: 96
@@ -355,7 +355,7 @@ TextureImporter:
       name: btn_blue
       rect:
         serializedVersion: 2
-        x: 664
+        x: 1060
         y: 320
         width: 96
         height: 96
@@ -377,7 +377,7 @@ TextureImporter:
       name: btn_green
       rect:
         serializedVersion: 2
-        x: 1164
+        x: 1560
         y: 320
         width: 96
         height: 96
@@ -399,7 +399,7 @@ TextureImporter:
       name: btn_disabled
       rect:
         serializedVersion: 2
-        x: 1064
+        x: 1460
         y: 320
         width: 96
         height: 96
@@ -421,7 +421,7 @@ TextureImporter:
       name: btn_ring
       rect:
         serializedVersion: 2
-        x: 1464
+        x: 1860
         y: 320
         width: 96
         height: 96
@@ -443,7 +443,7 @@ TextureImporter:
       name: btn_brush_active
       rect:
         serializedVersion: 2
-        x: 764
+        x: 1160
         y: 320
         width: 96
         height: 96
@@ -465,8 +465,8 @@ TextureImporter:
       name: pill
       rect:
         serializedVersion: 2
-        x: 1592
-        y: 220
+        x: 4
+        y: 120
         width: 64
         height: 64
       alignment: 0
@@ -487,7 +487,7 @@ TextureImporter:
       name: badge_green
       rect:
         serializedVersion: 2
-        x: 56
+        x: 496
         y: 136
         width: 48
         height: 48
@@ -509,8 +509,8 @@ TextureImporter:
       name: badge_blue
       rect:
         serializedVersion: 2
-        x: 1980
-        y: 236
+        x: 392
+        y: 136
         width: 48
         height: 48
       alignment: 0
@@ -531,8 +531,8 @@ TextureImporter:
       name: badge_amber
       rect:
         serializedVersion: 2
-        x: 1928
-        y: 236
+        x: 340
+        y: 136
         width: 48
         height: 48
       alignment: 0
@@ -553,7 +553,7 @@ TextureImporter:
       name: badge_red
       rect:
         serializedVersion: 2
-        x: 108
+        x: 548
         y: 136
         width: 48
         height: 48
@@ -575,7 +575,7 @@ TextureImporter:
       name: badge_slate
       rect:
         serializedVersion: 2
-        x: 160
+        x: 600
         y: 136
         width: 48
         height: 48
@@ -597,7 +597,7 @@ TextureImporter:
       name: badge_count
       rect:
         serializedVersion: 2
-        x: 4
+        x: 444
         y: 136
         width: 48
         height: 48
@@ -619,7 +619,7 @@ TextureImporter:
       name: cell
       rect:
         serializedVersion: 2
-        x: 1104
+        x: 1504
         y: 204
         width: 80
         height: 80
@@ -641,7 +641,7 @@ TextureImporter:
       name: cell_obstacle
       rect:
         serializedVersion: 2
-        x: 1272
+        x: 1672
         y: 204
         width: 80
         height: 80
@@ -663,7 +663,7 @@ TextureImporter:
       name: cell_oil
       rect:
         serializedVersion: 2
-        x: 1356
+        x: 1756
         y: 204
         width: 80
         height: 80
@@ -685,7 +685,7 @@ TextureImporter:
       name: cell_car
       rect:
         serializedVersion: 2
-        x: 1188
+        x: 1588
         y: 204
         width: 80
         height: 80
@@ -707,7 +707,7 @@ TextureImporter:
       name: cell_target
       rect:
         serializedVersion: 2
-        x: 1440
+        x: 1840
         y: 204
         width: 80
         height: 80
@@ -729,7 +729,7 @@ TextureImporter:
       name: tile_green
       rect:
         serializedVersion: 2
-        x: 804
+        x: 1204
         y: 188
         width: 96
         height: 96
@@ -751,7 +751,7 @@ TextureImporter:
       name: tile_red
       rect:
         serializedVersion: 2
-        x: 904
+        x: 1304
         y: 188
         width: 96
         height: 96
@@ -773,7 +773,7 @@ TextureImporter:
       name: tile_amber
       rect:
         serializedVersion: 2
-        x: 704
+        x: 1104
         y: 188
         width: 96
         height: 96
@@ -795,7 +795,7 @@ TextureImporter:
       name: tile_slate
       rect:
         serializedVersion: 2
-        x: 1004
+        x: 1404
         y: 188
         width: 96
         height: 96
@@ -817,7 +817,7 @@ TextureImporter:
       name: bar_track
       rect:
         serializedVersion: 2
-        x: 336
+        x: 776
         y: 152
         width: 32
         height: 32
@@ -839,7 +839,7 @@ TextureImporter:
       name: bar_fill_orange
       rect:
         serializedVersion: 2
-        x: 264
+        x: 704
         y: 152
         width: 32
         height: 32
@@ -861,7 +861,7 @@ TextureImporter:
       name: bar_fill_red
       rect:
         serializedVersion: 2
-        x: 300
+        x: 740
         y: 152
         width: 32
         height: 32
@@ -883,7 +883,7 @@ TextureImporter:
       name: underline
       rect:
         serializedVersion: 2
-        x: 444
+        x: 884
         y: 152
         width: 32
         height: 32
@@ -905,7 +905,7 @@ TextureImporter:
       name: scroll_track
       rect:
         serializedVersion: 2
-        x: 408
+        x: 848
         y: 152
         width: 32
         height: 32
@@ -927,7 +927,7 @@ TextureImporter:
       name: scroll_handle
       rect:
         serializedVersion: 2
-        x: 372
+        x: 812
         y: 152
         width: 32
         height: 32
@@ -949,7 +949,7 @@ TextureImporter:
       name: knob
       rect:
         serializedVersion: 2
-        x: 212
+        x: 652
         y: 136
         width: 48
         height: 48
@@ -971,8 +971,8 @@ TextureImporter:
       name: white_rounded
       rect:
         serializedVersion: 2
-        x: 1860
-        y: 220
+        x: 272
+        y: 120
         width: 64
         height: 64
       alignment: 0
@@ -993,7 +993,7 @@ TextureImporter:
       name: white
       rect:
         serializedVersion: 2
-        x: 480
+        x: 920
         y: 176
         width: 8
         height: 8
@@ -1015,7 +1015,7 @@ TextureImporter:
       name: circle
       rect:
         serializedVersion: 2
-        x: 1524
+        x: 1924
         y: 220
         width: 64
         height: 64
@@ -1059,7 +1059,7 @@ TextureImporter:
       name: vignette
       rect:
         serializedVersion: 2
-        x: 532
+        x: 928
         y: 288
         width: 128
         height: 128
@@ -1125,8 +1125,8 @@ TextureImporter:
       name: icon_turn_left
       rect:
         serializedVersion: 2
-        x: 1852
-        y: 420
+        x: 268
+        y: 288
         width: 128
         height: 128
       alignment: 0
@@ -1147,7 +1147,7 @@ TextureImporter:
       name: icon_turn_right
       rect:
         serializedVersion: 2
-        x: 4
+        x: 400
         y: 288
         width: 128
         height: 128
@@ -1169,7 +1169,7 @@ TextureImporter:
       name: icon_undo
       rect:
         serializedVersion: 2
-        x: 136
+        x: 532
         y: 288
         width: 128
         height: 128
@@ -1191,7 +1191,7 @@ TextureImporter:
       name: icon_restart
       rect:
         serializedVersion: 2
-        x: 268
+        x: 400
         y: 420
         width: 128
         height: 128
@@ -1213,7 +1213,7 @@ TextureImporter:
       name: icon_rotate_cw
       rect:
         serializedVersion: 2
-        x: 400
+        x: 532
         y: 420
         width: 128
         height: 128
@@ -1257,7 +1257,7 @@ TextureImporter:
       name: icon_play
       rect:
         serializedVersion: 2
-        x: 4
+        x: 136
         y: 420
         width: 128
         height: 128
@@ -1279,8 +1279,8 @@ TextureImporter:
       name: icon_trophy
       rect:
         serializedVersion: 2
-        x: 1720
-        y: 420
+        x: 136
+        y: 288
         width: 128
         height: 128
       alignment: 0
@@ -1345,8 +1345,8 @@ TextureImporter:
       name: icon_phone
       rect:
         serializedVersion: 2
-        x: 1852
-        y: 552
+        x: 4
+        y: 420
         width: 128
         height: 128
       alignment: 0
@@ -1389,7 +1389,7 @@ TextureImporter:
       name: icon_sliders
       rect:
         serializedVersion: 2
-        x: 664
+        x: 1060
         y: 420
         width: 128
         height: 128
@@ -1411,7 +1411,7 @@ TextureImporter:
       name: icon_sound_on
       rect:
         serializedVersion: 2
-        x: 928
+        x: 1324
         y: 420
         width: 128
         height: 128
@@ -1433,7 +1433,7 @@ TextureImporter:
       name: icon_sound_off
       rect:
         serializedVersion: 2
-        x: 796
+        x: 1192
         y: 420
         width: 128
         height: 128
@@ -1543,7 +1543,7 @@ TextureImporter:
       name: icon_home
       rect:
         serializedVersion: 2
-        x: 928
+        x: 1060
         y: 552
         width: 128
         height: 128
@@ -1631,7 +1631,7 @@ TextureImporter:
       name: icon_sparkle
       rect:
         serializedVersion: 2
-        x: 1060
+        x: 1456
         y: 420
         width: 128
         height: 128
@@ -1653,7 +1653,7 @@ TextureImporter:
       name: icon_star
       rect:
         serializedVersion: 2
-        x: 1192
+        x: 1588
         y: 420
         width: 128
         height: 128
@@ -1675,7 +1675,7 @@ TextureImporter:
       name: icon_star_outline
       rect:
         serializedVersion: 2
-        x: 1324
+        x: 1720
         y: 420
         width: 128
         height: 128
@@ -1697,7 +1697,7 @@ TextureImporter:
       name: icon_obstacle
       rect:
         serializedVersion: 2
-        x: 1456
+        x: 1588
         y: 552
         width: 128
         height: 128
@@ -1719,7 +1719,7 @@ TextureImporter:
       name: icon_oil
       rect:
         serializedVersion: 2
-        x: 1588
+        x: 1720
         y: 552
         width: 128
         height: 128
@@ -1763,7 +1763,7 @@ TextureImporter:
       name: icon_target
       rect:
         serializedVersion: 2
-        x: 1456
+        x: 1852
         y: 420
         width: 128
         height: 128
@@ -1807,7 +1807,7 @@ TextureImporter:
       name: icon_plus
       rect:
         serializedVersion: 2
-        x: 136
+        x: 268
         y: 420
         width: 128
         height: 128
@@ -1829,7 +1829,7 @@ TextureImporter:
       name: icon_minus
       rect:
         serializedVersion: 2
-        x: 1324
+        x: 1456
         y: 552
         width: 128
         height: 128
@@ -1873,7 +1873,7 @@ TextureImporter:
       name: icon_save
       rect:
         serializedVersion: 2
-        x: 532
+        x: 664
         y: 420
         width: 128
         height: 128
@@ -1895,8 +1895,8 @@ TextureImporter:
       name: icon_trash
       rect:
         serializedVersion: 2
-        x: 1588
-        y: 420
+        x: 4
+        y: 288
         width: 128
         height: 128
       alignment: 0
@@ -1917,7 +1917,7 @@ TextureImporter:
       name: icon_zap
       rect:
         serializedVersion: 2
-        x: 268
+        x: 664
         y: 288
         width: 128
         height: 128
@@ -1939,7 +1939,7 @@ TextureImporter:
       name: icon_keyboard
       rect:
         serializedVersion: 2
-        x: 1060
+        x: 1192
         y: 552
         width: 128
         height: 128
@@ -1983,7 +1983,7 @@ TextureImporter:
       name: star_gold
       rect:
         serializedVersion: 2
-        x: 604
+        x: 1004
         y: 188
         width: 96
         height: 96
@@ -2005,7 +2005,7 @@ TextureImporter:
       name: star_empty
       rect:
         serializedVersion: 2
-        x: 504
+        x: 904
         y: 188
         width: 96
         height: 96
@@ -2027,8 +2027,8 @@ TextureImporter:
       name: btn_yellow
       rect:
         serializedVersion: 2
-        x: 1664
-        y: 320
+        x: 104
+        y: 188
         width: 96
         height: 96
       alignment: 0
@@ -2049,7 +2049,7 @@ TextureImporter:
       name: btn_pink
       rect:
         serializedVersion: 2
-        x: 1264
+        x: 1660
         y: 320
         width: 96
         height: 96
@@ -2071,7 +2071,7 @@ TextureImporter:
       name: btn_close
       rect:
         serializedVersion: 2
-        x: 864
+        x: 1260
         y: 320
         width: 96
         height: 96
@@ -2225,8 +2225,8 @@ TextureImporter:
       name: pill_lavender
       rect:
         serializedVersion: 2
-        x: 1660
-        y: 220
+        x: 72
+        y: 120
         width: 128
         height: 64
       alignment: 0
@@ -2247,8 +2247,8 @@ TextureImporter:
       name: swatch_ring
       rect:
         serializedVersion: 2
-        x: 1792
-        y: 220
+        x: 204
+        y: 120
         width: 64
         height: 64
       alignment: 0
@@ -2269,7 +2269,7 @@ TextureImporter:
       name: icon_pause
       rect:
         serializedVersion: 2
-        x: 1720
+        x: 1852
         y: 552
         width: 128
         height: 128
@@ -2291,7 +2291,7 @@ TextureImporter:
       name: icon_level_design
       rect:
         serializedVersion: 2
-        x: 1192
+        x: 1324
         y: 552
         width: 128
         height: 128
@@ -2463,6 +2463,72 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: icon_hint_bulb
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 552
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79bc0d685a611837e77da47438eaff37
+      internalID: 2095028523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_shift_left
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 420
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c9231dac2db484e95387914815a8fcb
+      internalID: -1097012804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_shift_right
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 420
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c29ee7468c609fd204078ac797dc7f8f
+      internalID: 1824513453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -2537,6 +2603,7 @@ TextureImporter:
       icon_gear: 1916823108
       icon_grid: 139943312
       icon_help: -416592299
+      icon_hint_bulb: 2095028523
       icon_home: -263899275
       icon_keyboard: -513993130
       icon_level_design: -2087263310
@@ -2550,6 +2617,8 @@ TextureImporter:
       icon_restart: 714431401
       icon_rotate_cw: 348235845
       icon_save: -901202593
+      icon_shift_left: -1097012804
+      icon_shift_right: 1824513453
       icon_sliders: -346439009
       icon_sound_off: 1259862486
       icon_sound_on: 1970538285

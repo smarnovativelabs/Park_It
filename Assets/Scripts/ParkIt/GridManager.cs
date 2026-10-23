@@ -18,9 +18,10 @@ namespace ParkIt
         public float TileSize => tileSize;
         public LevelData CurrentLevel => currentLevel;
 
-        private static readonly Color TileA = new Color(.48f, .62f, .73f);
-        private static readonly Color TileB = new Color(.52f, .66f, .77f);
-        private static readonly Color Grout = new Color(.27f, .38f, .49f);
+        // Muted blue-grey slate, with softer joints matching the reference board.
+        private static readonly Color TileA = new Color(.515f, .61f, .675f);
+        private static readonly Color TileB = new Color(.545f, .645f, .71f);
+        private static readonly Color Grout = new Color(.34f, .44f, .51f);
         private static readonly Color Rim = new Color(1f, .89f, .72f);
         private static readonly Color Plinth = new Color(.63f, .15f, .95f);
         private static readonly Color GhostGold = new Color(1f, .85f, .20f, 1f);
@@ -88,46 +89,52 @@ namespace ParkIt
             root.SetParent(dioramaRoot, false);
             activeProps.Add(root.gameObject);
 
-            var plinth = CreatePlatformMaterial(Plinth, .86f, .32f);
-            var rimMat = CreatePlatformMaterial(Rim, .62f, .52f);
+            var plinth = CreatePlatformMaterial(Plinth, .78f, .28f);
+            var rimMat = CreatePlatformMaterial(Rim, .76f, .38f);
             var grout = CreatePlatformMaterial(Grout, .32f, .10f);
 
             var purpleShadow = CreatePlatformMaterial(new Color(.34f, .06f, .59f), .65f, .12f);
             var purpleLip = CreatePlatformMaterial(new Color(.82f, .46f, 1f), .82f, .26f);
-            DioramaMeshes.RoundedBlock("Plinth_Outline", root, new Vector3(0, -.88f, 0), new Vector3(w + 1.88f, .20f, h + 1.88f), 1.04f, .08f, purpleShadow);
-            DioramaMeshes.RoundedBlock("Plinth_Base", root, new Vector3(0, -.53f, 0), new Vector3(w + 2.02f, .78f, h + 2.02f), 1.10f, .28f, plinth);
-            DioramaMeshes.RoundedBlock("Purple_Top_Lip", root, new Vector3(0, -.22f, 0), new Vector3(w + 1.85f, .18f, h + 1.85f), 1.02f, .075f, purpleLip);
-            DioramaMeshes.RoundedBlock("Cream_Rim", root, new Vector3(0, -.23f, 0), new Vector3(w + rim * 2, .32f, h + rim * 2), .80f, .12f, rimMat);
-            // Individual soft curb pieces give the cream surround its toy-block seams.
+            DioramaMeshes.RoundedBlock("Plinth_Outline", root, new Vector3(0, -.88f, 0), new Vector3(w + 1.88f, .20f, h + 1.88f), 1.24f, .09f, purpleShadow);
+            DioramaMeshes.RoundedBlock("Plinth_Base", root, new Vector3(0, -.53f, 0), new Vector3(w + 2.02f, .78f, h + 2.02f), 1.30f, .36f, plinth);
+            DioramaMeshes.RoundedBlock("Purple_Top_Lip", root, new Vector3(0, -.22f, 0), new Vector3(w + 1.85f, .18f, h + 1.85f), 1.22f, .085f, purpleLip);
+            DioramaMeshes.RoundedBlock("Cream_Rim", root, new Vector3(0, -.39f, 0), new Vector3(w + rim * 2, .32f, h + rim * 2), .80f, .12f, rimMat);
+            // Flush pieces share the corner cross section, so no open seams remain.
             for (int x = 0; x < width; x++)
             {
                 float px = (x - (width - 1) * .5f) * tileSize;
+                bool end = x == 0 || x == width - 1;
+                if (end) px += x == 0 ? .335f : -.335f;
                 foreach (int side in new[] { -1, 1 })
-                    DioramaMeshes.RoundedBlock("Rim_End_" + x + "_" + side, root,
+                    DioramaMeshes.CreamStraight("Rim_End_" + x + "_" + side, root,
                         new Vector3(px, -.005f, side * (h * .5f + .33f)),
-                        new Vector3(tileSize - .025f, .32f, .72f), .18f, .10f, rimMat);
+                        tileSize - (end ? .67f : 0), 90, rimMat);
             }
             for (int y = 0; y < height; y++)
             {
                 float pz = (y - (height - 1) * .5f) * tileSize;
+                bool end = y == 0 || y == height - 1;
+                if (end) pz += y == 0 ? .335f : -.335f;
                 foreach (int side in new[] { -1, 1 })
-                    DioramaMeshes.RoundedBlock("Rim_Side_" + y + "_" + side, root,
+                    DioramaMeshes.CreamStraight("Rim_Side_" + y + "_" + side, root,
                         new Vector3(side * (w * .5f + .33f), -.005f, pz),
-                        new Vector3(.72f, .32f, tileSize - .025f), .18f, .10f, rimMat);
+                        tileSize - (end ? .67f : 0), 0, rimMat);
             }
             foreach (int sx in new[] { -1, 1 })
                 foreach (int sz in new[] { -1, 1 })
-                    DioramaMeshes.RoundedBlock("Rim_Corner_" + sx + "_" + sz, root,
-                        new Vector3(sx * (w * .5f + .29f), -.005f, sz * (h * .5f + .29f)),
-                        new Vector3(.80f, .32f, .80f), .25f, .10f, rimMat);
-            DioramaMeshes.RoundedBlock("Grout_Bed", root, new Vector3(0, -.12f, 0), new Vector3(w + .06f, .18f, h + .06f), .22f, .04f, grout);
+                    DioramaMeshes.CreamCorner("Rim_Corner_" + sx + "_" + sz, root,
+                        new Vector3(sx * (w * .5f - .67f), -.005f, sz * (h * .5f - .67f)),
+                        sx > 0 ? (sz > 0 ? 0 : 90) : (sz > 0 ? 270 : 180), rimMat);
+            // Recess the joints below the top bevel so its rounded profile catches light.
+            DioramaMeshes.RoundedBlock("Grout_Bed", root, new Vector3(0, -.20f, 0), new Vector3(w + .06f, .18f, h + .06f), .22f, .04f, grout);
         }
 
         private GameObject CreateTile(Vector3 pos, int x, int y)
         {
-            var mat = CreatePlatformMaterial((x + y) % 2 == 0 ? TileA : TileB, .48f, .13f);
-            var tile = DioramaMeshes.RoundedBlock($"Tile_{x}_{y}", dioramaRoot, Vector3.zero, new Vector3(tileSize * .976f, .2f, tileSize * .976f), .18f, .065f, mat);
-            tile.transform.position = pos + Vector3.down * .1f;
+            var mat = CreatePlatformMaterial((x + y) % 2 == 0 ? TileA : TileB, .68f, .10f);
+            var tile = DioramaMeshes.RoundedBlock($"Tile_{x}_{y}", dioramaRoot, Vector3.zero, new Vector3(tileSize * .984f, .28f, tileSize * .984f), .25f, .12f, mat);
+            // Keep the driving surface at y=0, with the extra depth below it.
+            tile.transform.position = pos + Vector3.down * .14f;
             return tile;
         }
 

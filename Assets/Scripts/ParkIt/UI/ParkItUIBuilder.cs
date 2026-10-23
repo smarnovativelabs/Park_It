@@ -75,6 +75,8 @@ namespace ParkIt
             StylePauseAndHelp(refs);
             BuildResults(modalLayer, refs);
             BuildToast(toastLayer, refs);
+            EnsureHintButton(refs);
+            EnsureShiftControls(refs);
 
             var creator = LevelCreatorUI.Create(modalLayer, null);
             refs.levelCreator = creator;
@@ -357,6 +359,60 @@ namespace ParkIt
             }
         }
 
+        public static void EnsureHintButton(ParkItUIReferences refs)
+        {
+            if (refs.pauseButton == null) return;
+            if (refs.hintButton == null)
+                refs.hintButton = refs.pauseButton.transform.Find("HintButton")?.GetComponent<UnityEngine.UI.Button>();
+            if (refs.hintButton == null)
+            {
+                refs.hintButton = UIKit.Button("HintButton", refs.pauseButton.transform, "dock_panel", null);
+                var rect = (RectTransform)refs.hintButton.transform;
+                rect.anchorMin = new Vector2(0, 0);
+                rect.anchorMax = new Vector2(1, 0);
+                rect.pivot = new Vector2(.5f, 1);
+                rect.sizeDelta = new Vector2(0, 114);
+                rect.anchoredPosition = new Vector2(0, -18);
+            }
+            // Existing Hint parent, dimensions and background are artist-authored.
+            if (refs.hintIcon == null)
+            {
+                var icon = UIKit.Img("HintIcon", refs.hintButton.transform, "icon_hint_bulb", Color.white);
+                icon.preserveAspect = true;
+                icon.raycastTarget = false;
+                icon.gameObject.AddComponent<UnityEngine.UI.LayoutElement>().ignoreLayout = true;
+                UIKit.Place(icon.rectTransform, new Vector2(.5f, .5f), new Vector2(.5f, .5f),
+                    Vector2.zero, new Vector2(78, 78));
+                refs.hintIcon = icon;
+            }
+            var oldLabel = refs.hintButton.transform.Find("Text");
+            if (oldLabel != null) oldLabel.gameObject.SetActive(false);
+            if (refs.hintPanel != null) refs.hintPanel.SetActive(false);
+            if (refs.hintMoveButton != null) refs.hintMoveButton.gameObject.SetActive(false);
+        }
+
+        public static void EnsureShiftControls(ParkItUIReferences refs)
+        {
+            if (refs.dockDrive == null) return;
+            if (refs.shiftLeftBtn == null)
+            {
+                CreateDriveBtn(refs.dockDrive, "Shift L", "dock_cyan", "icon_shift_left", UIKit.Ink,
+                    128, 152, false, out refs.shiftLeftBtn, out refs.shiftLeftBg, out refs.shiftLeftRing);
+                ((RectTransform)refs.shiftLeftBtn.transform).sizeDelta = new Vector2(128, 152);
+                refs.shiftLeftBtn.name = "ShiftLeft";
+                refs.shiftLeftBtn.transform.SetAsFirstSibling();
+                refs.shiftLeftBtn.GetComponentInChildren<UnityEngine.UI.Text>().fontSize = 26;
+            }
+            if (refs.shiftRightBtn == null)
+            {
+                CreateDriveBtn(refs.dockDrive, "Shift R", "dock_cyan", "icon_shift_right", UIKit.Ink,
+                    128, 152, false, out refs.shiftRightBtn, out refs.shiftRightBg, out refs.shiftRightRing);
+                ((RectTransform)refs.shiftRightBtn.transform).sizeDelta = new Vector2(128, 152);
+                refs.shiftRightBtn.name = "ShiftRight";
+                refs.shiftRightBtn.transform.SetAsLastSibling();
+                refs.shiftRightBtn.GetComponentInChildren<UnityEngine.UI.Text>().fontSize = 26;
+            }
+        }
         private static void ApplyGloss(UnityEngine.UI.Image image, string sprite)
         {
             UIKit.SetSprite(image, sprite);
@@ -423,7 +479,7 @@ namespace ParkIt
             UIKit.Size(subPill, 240, 48);
             UIKit.Layout(subPill, false, 0, new RectOffset(16, 16, 2, 2), TextAnchor.MiddleCenter);
             refs.levelTitleText = UIKit.Bold(subPill.transform, "First Gear", 28, UIKit.Ink, TextAnchor.MiddleCenter);
-            refs.levelTitleText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            UIKit.FitLevelTitle(refs.levelTitleText);
             EnsureLevelCardDetails(refs);
 
             // ---- top-right cluster ----

@@ -9,7 +9,7 @@ namespace ParkIt
         public static GameManager Instance { get; private set; }
 
         [Header("Level Sequence")]
-        [Tooltip("Leave empty to use the eight built-in LevelCatalog puzzles.")]
+        [Tooltip("Leave empty to use the twenty built-in LevelCatalog puzzles.")]
         [SerializeField] private List<LevelData> levels = new List<LevelData>();
         [SerializeField] private int currentLevelIndex = 0;
 
@@ -79,7 +79,6 @@ namespace ParkIt
             {
                 carController.OnLevelWon += HandleWin;
                 carController.OnMoveStarted += m => SfxPlayer.Play(m.isOilSlip ? Sfx.Slip : Sfx.Move);
-                carController.OnLevelLost += () => SfxPlayer.Play(Sfx.Lose);
             }
 
             LoadCurrentLevel();
@@ -87,7 +86,6 @@ namespace ParkIt
 
         private void HandleWin()
         {
-            SfxPlayer.Play(Sfx.Win);
             var level = CurrentLevelData;
             if (level == null || IsPlayingCustom) return;
             LevelCatalog.RecordStars(level.levelIndex, LevelCatalog.StarsFor(carController.MovesUsed, level.optimalMoves));
