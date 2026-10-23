@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c267ca4e2cbf948a21a40b58e3e52a, type: 3}
+  m_Name: ParkItCarModel
+  m_EditorClassIdentifier: Assembly-CSharp::ParkIt.CarModelConfig
+  model: {fileID: 919132149155446097, guid: 6e90b60ba916c20478aa6a2d94cc065b, type: 3}
+  length: 1.71
+  yawOffset: 180
+  wheelNameContains: Tire
+  bodyColor: {r: 1, g: 0.78, b: 0.1, a: 1}
+  bodyMaterialName: phong1
+  bodyMaterial: {fileID: 2100000, guid: 1a6f69e28409b2d46980770cdaa25703, type: 2}
+  yellowBodyMaterial: {fileID: 2100000, guid: 382da8ad8d74ab64a80a3c37273e7d07, type: 2}
+  blueBodyMaterial: {fileID: 2100000, guid: 9a1e1d7b0d749364d8afebd0021ba4a7, type: 2}
+  greenBodyMaterial: {fileID: 2100000, guid: d123b35366ef0df42ba8d15968ff673f, type: 2}
+  redBodyMaterial: {fileID: 2100000, guid: 8cd86de21b0a9df4397d3956836f480b, type: 2}

@@ -1,0 +1,18 @@
+Title: Cartoon Sports Car
+URL: http://sketchfab.com/3d-models/cartoon-sports-car-f01722028faf4c81bd1ccf39f8678afa
+Author: https://sketchfab.com/uistudios
+
+Vertices: 1953
+Polygons: 3970
+Animations: 0
+
+Download Date: 22/10/2026
+Download Format: FBX
+Download Path: D:\Rip 3d\3d_Ripper_Pro_v110\Downloads\AlanBalodi\01- Cartoon.Sports.Car\
+Download File: f01722028faf4c81bd1ccf39f8678afa.fbx
+
+Textures: 4
+#1: 1397429efcdb4373a9f3cd7ab75574c9_RGB_body.jpeg
+#2: 5754b11e1193442ab3e1eced08b3a22b_RGB_spoiler.jpeg
+#3: 761f388751cc470d9e292fa52dd6ea91_RGB_wheel.jpeg
+#4: ffc654b455724df4bcea70a04a44a0a0_N_wheelNormal.jpeg
