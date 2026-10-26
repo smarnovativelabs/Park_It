@@ -30,6 +30,8 @@ namespace ParkIt
 
         public void InitializeGrid(LevelData level)
         {
+            GameplayEffects.For(this).Clear();
+            GetComponent<BoardEffects>()?.Finish();
             currentLevel = level;
             ClearGrid();
 
@@ -67,6 +69,8 @@ namespace ParkIt
             }
 
             CameraRig.Instance?.FrameBoard(level.gridWidth, level.gridHeight, tileSize);
+            var motion = GetComponent<BoardEffects>() ?? gameObject.AddComponent<BoardEffects>();
+            motion.Begin(activeProps, level.gridWidth, level.gridHeight, tileSize);
         }
 
         private void ClearGrid()
@@ -189,12 +193,29 @@ namespace ParkIt
             DioramaMeshes.RoundedBlock("Bay_Inner_Lip", t, new Vector3(0, .14f, 0), new Vector3(s - .25f, .045f, s - .25f), .16f, .018f, lip);
             DioramaMeshes.RoundedBlock("Bay_Fill", t, new Vector3(0, .163f, 0), new Vector3(s - .34f, .045f, s - .34f), .13f, .018f, fill);
 
-            // Raised white P, kept aligned with the required parking direction.
-            DioramaMeshes.RoundedBlock("P_Spine", t, new Vector3(-.27f, .215f, 0), new Vector3(.19f, .06f, .90f), .06f, .02f, whiteMat);
-            DioramaMeshes.RoundedBlock("P_Top", t, new Vector3(.015f, .215f, .355f), new Vector3(.57f, .06f, .19f), .06f, .02f, whiteMat);
-            DioramaMeshes.RoundedBlock("P_Mid", t, new Vector3(.015f, .215f, -.015f), new Vector3(.57f, .06f, .19f), .06f, .02f, whiteMat);
-            DioramaMeshes.RoundedBlock("P_Loop", t, new Vector3(.245f, .215f, .17f), new Vector3(.19f, .06f, .46f), .065f, .02f, whiteMat);
             DioramaMeshes.RoundedBlock("Bay_Glint", t, new Vector3(-.42f, .148f, .79f), new Vector3(.48f, .018f, .055f), .025f, .007f, whiteMat);
+
+            // Preserve the original white P, leaving a separate lane for the heading arrow.
+            DioramaMeshes.RoundedBlock("P_Spine", t, new Vector3(-.42f, .215f, 0), new Vector3(.19f, .06f, .90f), .06f, .02f, whiteMat);
+            DioramaMeshes.RoundedBlock("P_Top", t, new Vector3(-.135f, .215f, .355f), new Vector3(.57f, .06f, .19f), .06f, .02f, whiteMat);
+            DioramaMeshes.RoundedBlock("P_Mid", t, new Vector3(-.135f, .215f, -.015f), new Vector3(.57f, .06f, .19f), .06f, .02f, whiteMat);
+            DioramaMeshes.RoundedBlock("P_Loop", t, new Vector3(.095f, .215f, .17f), new Vector3(.19f, .06f, .46f), .065f, .02f, whiteMat);
+
+            // Local +Z is the required car facing direction, not the approach direction.
+            var marker = new GameObject("Parking_Facing_Indicator").transform;
+            marker.SetParent(t, false);
+            marker.localPosition = new Vector3(.48f, .205f, 0);
+            DioramaMeshes.MeshObject("Heading_Outline", marker, DioramaMeshes.TriangleArrow, shadow,
+                Vector3.zero, 0, new Vector3(.64f, .22f, 1.20f));
+            DioramaMeshes.MeshObject("Heading_Arrow", marker, DioramaMeshes.TriangleArrow, whiteMat,
+                new Vector3(0, .025f, 0), 0, new Vector3(.56f, .22f, 1.08f));
+            foreach (var renderer in marker.GetComponentsInChildren<Renderer>())
+            {
+                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                renderer.receiveShadows = false;
+            }
+            var motion = GetComponent<BoardEffects>() ?? gameObject.AddComponent<BoardEffects>();
+            motion.BindBay(t);
             return target;
         }
 
@@ -215,6 +236,8 @@ namespace ParkIt
             ClearGhostNodes();
             foreach (var move in validMoves)
             {
+                // Keep movement discs from covering the parking direction marking.
+                if (currentLevel != null && move.destination == currentLevel.targetCoord) continue;
                 Vector3 wPos = CoordToWorldPosition(move.destination) + Vector3.up * .08f;
                 GameObject nodeObj = CreateGhostNode(wPos, move);
                 nodeObj.GetComponent<GhostNodeView>().Initialize(move, () => onNodeSelected?.Invoke(move));

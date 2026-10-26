@@ -41,14 +41,7 @@ namespace ParkIt
             if (!level.IsBlocked(coord + right))
                 moves.Add(new ValidMoveData { moveType = MoveType.TurnRight, destination = coord + right, resultingDirection = rightDir });
 
-            // Shifts nudge diagonally forward and need the tile ahead clear.
-            if (!level.IsBlocked(ahead))
-            {
-                if (!level.IsBlocked(ahead + left))
-                    moves.Add(new ValidMoveData { moveType = MoveType.ShiftLeft, destination = ahead + left, resultingDirection = dir });
-                if (!level.IsBlocked(ahead + right))
-                    moves.Add(new ValidMoveData { moveType = MoveType.ShiftRight, destination = ahead + right, resultingDirection = dir });
-            }
+            // Only the four standard controls are available, including in hints and creator validation.
 
             return moves;
         }

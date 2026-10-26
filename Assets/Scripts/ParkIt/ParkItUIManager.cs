@@ -72,6 +72,7 @@ namespace ParkIt
 
         private void OnDestroy()
         {
+            StopButtonTutorial();
             if (carController != null)
             {
                 carController.OnFuelChanged -= UpdateFuelDisplay;
@@ -148,6 +149,7 @@ namespace ParkIt
             if (screen != lastScreen) ApplyLayout(false);
             HandleKeyboard();
             AnimateHUD();
+            UpdateButtonTutorial();
         }
 
         private void ApplyLayout(bool force)
@@ -191,6 +193,7 @@ namespace ParkIt
 
         public void HideResults()
         {
+            if (victoryRoot != null) victoryRoot.GetComponent<VictoryStarFeedback>()?.ResetPose();
             UIPopupTransition.Hide(victoryRoot);
             UIPopupTransition.Hide(defeatRoot);
         }
@@ -205,7 +208,11 @@ namespace ParkIt
         public void OnClickTurnLeft() => ExecuteMoveType(MoveType.TurnLeft);
         public void OnClickTurnRight() => ExecuteMoveType(MoveType.TurnRight);
         public void OnClickUndo() { UndoManager.Instance?.PerformUndo(); RefreshHUD(); }
-        public void OnClickRestart() => GameManager.Instance?.RestartLevel();
+        public void OnClickRestart()
+        {
+            if (buttonTutorialStep == 6) ProgressSave.Instance.CompleteTutorial();
+            GameManager.Instance?.RestartLevel();
+        }
 
         public void OnClickNextLevel()
         {
@@ -225,18 +232,21 @@ namespace ParkIt
                 carController.ExecuteMove(m);
                 return;
             }
+            carController.RejectMove(type);
         }
 
         public void StartGame()
         {
             bool enteringFromTitle = TitleVisible;
             ShowTitle(false);
+            if (enteringFromTitle && !ProgressSave.Instance.TutorialCompleted) OpenHelp();
             if (enteringFromTitle && carController != null && !carController.IsBusy && !carController.IsLevelComplete)
                 carController.GetComponent<CarVisuals>()?.PlayLanding();
         }
 
         public void ShowTitle(bool show)
         {
+            if (show) StopButtonTutorial();
             titleRoot.SetActive(show);
             hudLayer.gameObject.SetActive(!show);
             if (CameraRig.Instance != null) CameraRig.Instance.Orbiting = show;
@@ -302,8 +312,6 @@ namespace ParkIt
             else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) OnClickReverse();
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) OnClickTurnLeft();
             else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) OnClickTurnRight();
-            else if (Input.GetKeyDown(KeyCode.Q)) ExecuteMoveType(MoveType.ShiftLeft);
-            else if (Input.GetKeyDown(KeyCode.E)) ExecuteMoveType(MoveType.ShiftRight);
             else if (Input.GetKeyDown(KeyCode.C)) CycleCamera();
             else if (Input.GetKeyDown(KeyCode.Z)) ToggleZen();
         }

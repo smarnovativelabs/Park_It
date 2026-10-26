@@ -19,6 +19,7 @@ namespace ParkIt
             public int version = 1;
             public int lastLevelIndex;
             public bool soundMuted;
+            public bool tutorialCompleted;
             public int carColorIndex;
             public string creatorDraftJson = "";
             public List<LevelProgress> levels = new List<LevelProgress>();
@@ -30,6 +31,8 @@ namespace ParkIt
         public string FilePath { get; }
         public int LastLevelIndex => data.lastLevelIndex;
         public bool SoundMuted => data.soundMuted;
+        public bool TutorialCompleted => data.tutorialCompleted;
+        public void CompleteTutorial() { data.tutorialCompleted = true; Save(); }
         public int CarColorIndex => Mathf.Clamp(data.carColorIndex, 0, 3);
         public string CreatorDraftJson => data.creatorDraftJson ?? "";
         private SaveData data;

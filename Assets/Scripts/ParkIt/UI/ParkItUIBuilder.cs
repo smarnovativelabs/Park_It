@@ -412,6 +412,10 @@ namespace ParkIt
                 refs.shiftRightBtn.transform.SetAsLastSibling();
                 refs.shiftRightBtn.GetComponentInChildren<UnityEngine.UI.Text>().fontSize = 26;
             }
+            refs.shiftLeftBtn.interactable = false;
+            refs.shiftRightBtn.interactable = false;
+            refs.shiftLeftBtn.gameObject.SetActive(false);
+            refs.shiftRightBtn.gameObject.SetActive(false);
         }
         private static void ApplyGloss(UnityEngine.UI.Image image, string sprite)
         {
@@ -830,7 +834,7 @@ namespace ParkIt
             CreateStatColumn(stats.transform, "MOVES USED", UIKit.TextMain, out refs.victoryMoves, out refs.victoryOptimal);
             CreateStatColumn(stats.transform, "FUEL LEFT", UIKit.Emerald, out refs.victoryFuel, out refs.victoryCapacity);
 
-            refs.victoryNextBtn = UIKit.IconTextButton("Next", vPanel, "btn_green", "icon_play", UIKit.White, "Next Puzzle Level", UIKit.White, 30, 100, null, 30);
+            refs.victoryNextBtn = UIKit.IconTextButton("Next", vPanel, "dock_green", "icon_play", UIKit.White, "Next Puzzle Level", UIKit.White, 45, 100, null, 30);
             refs.victoryNextLabel = refs.victoryNextBtn.GetComponentInChildren<Text>();
 
             var row = UIKit.Rect("Row", vPanel);

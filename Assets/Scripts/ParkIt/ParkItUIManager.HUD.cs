@@ -147,8 +147,13 @@ namespace ParkIt
             }
 
             driveButtons.Clear();
-            BindDriveButton(MoveType.ShiftLeft, refs.shiftLeftBtn, refs.shiftLeftBg, refs.shiftLeftRing, "dock_cyan", OnClickShiftLeft);
-            BindDriveButton(MoveType.ShiftRight, refs.shiftRightBtn, refs.shiftRightBg, refs.shiftRightRing, "dock_cyan", OnClickShiftRight);
+            foreach (var button in new[] { refs.shiftLeftBtn, refs.shiftRightBtn })
+            {
+                if (button == null) continue;
+                button.onClick.RemoveAllListeners();
+                button.interactable = false;
+                button.gameObject.SetActive(false);
+            }
             BindDriveButton(MoveType.Forward, refs.forwardBtn, refs.forwardBg, refs.forwardRing, "dock_drive", OnClickDrive);
             BindDriveButton(MoveType.TurnLeft, refs.turnLeftBtn, refs.turnLeftBg, refs.turnLeftRing, "dock_yellow", OnClickTurnLeft);
             BindDriveButton(MoveType.TurnRight, refs.turnRightBtn, refs.turnRightBg, refs.turnRightRing, "dock_yellow", OnClickTurnRight);
@@ -158,6 +163,8 @@ namespace ParkIt
         private void BindDriveButton(MoveType type, Button btn, Image bg, Image ring, string enabledSprite, UnityEngine.Events.UnityAction action)
         {
             if (btn == null) return;
+            var blocked = btn.GetComponent<BlockedMoveFeedback>() ?? btn.gameObject.AddComponent<BlockedMoveFeedback>();
+            blocked.Move = type;
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(action);
             var group = btn.GetComponent<CanvasGroup>() ?? btn.gameObject.AddComponent<CanvasGroup>();
@@ -364,6 +371,7 @@ namespace ParkIt
                 default: action = OnClickTurnRight; break;
             }
             var b = UIKit.Button(label, dockDrive, sprite, action);
+            b.gameObject.AddComponent<BlockedMoveFeedback>().Move = type;
             UIKit.Layout(b, true, 4, new RectOffset(0, 0, isDrive ? 14 : 14, 16), TextAnchor.MiddleCenter);
             UIKit.Size(b, w, h);
             UIKit.Icon(b.transform, icon, iconColor, isDrive ? 78 : 68);
@@ -401,6 +409,9 @@ namespace ParkIt
             fuelText.text = currentFuel.ToString();
             fuelText.color = currentFuel <= 2 ? UIKit.Rose : normalFuelColor;
             fuelMaxText.text = $"/{maxFuel}";
+            var feedback = fuelText.GetComponent<FuelFeedback>() ?? fuelText.gameObject.AddComponent<FuelFeedback>();
+            Transform icon = fuelPill != null && fuelPill.childCount > 0 ? fuelPill.GetChild(0) : null;
+            feedback.SetFuel(currentFuel, icon);
         }
 
         private void RefreshHUD()

@@ -63,7 +63,7 @@ namespace ParkIt
             if (refs.helpGotItBtn != null)
             {
                 refs.helpGotItBtn.onClick.RemoveAllListeners();
-                refs.helpGotItBtn.onClick.AddListener(CloseHelp);
+                refs.helpGotItBtn.onClick.AddListener(AdvanceTutorial);
             }
 
             pauseRoot = refs.pauseRoot;
@@ -106,11 +106,58 @@ namespace ParkIt
         }
 
         public void CloseLevelSelect() => UIPopupTransition.Hide(levelSelectRoot);
-        public void CloseHelp() => UIPopupTransition.Hide(helpRoot);
+        public void CloseHelp() { StopButtonTutorial(); UIPopupTransition.Hide(helpRoot); }
         public void OpenHelp()
         {
             ClosePause();
-            UIPopupTransition.Show(helpRoot);
+            UIPopupTransition.Hide(helpRoot);
+            BeginButtonTutorial();
+        }
+
+        private int tutorialPage;
+        private static readonly string[] TutorialTitles = {
+            "PARK IN THE GREEN BAY", "MEET YOUR CONTROLS", "WATCH YOUR FUEL", "NEED A HINT?", "TRY AGAIN ANY TIME"
+        };
+        private static readonly string[] TutorialBodies = {
+            "Reach the green parking bay. Point the car's nose in the same direction as the bay's arrow to win.",
+            "Drive moves forward. Rev moves backward. Left and Right move to the side AND turn the car. Use the bottom buttons to drive.",
+            "Each move uses 1 fuel. Hydrants block your path. Driving onto oil slides you forward until dry ground or a blocked tile.",
+            "Tap the bulb just below Pause. A green highlight marks the next button to press. Hints cost no fuel. Tap again after moving for your next hint.",
+            "Undo takes back a move. Restart gives you a fresh attempt. If a route cannot finish with your fuel, Hint points to Undo or Restart. Reopen this guide with the yellow Help button."
+        };
+        private static readonly string[] TutorialIcons = { "icon_target", "icon_arrow_up", "icon_fuel", "icon_hint_bulb", "icon_undo" };
+
+        private void AdvanceTutorial()
+        {
+            if (tutorialPage < TutorialTitles.Length - 1) { tutorialPage++; RefreshTutorial(); return; }
+            ProgressSave.Instance.CompleteTutorial();
+            CloseHelp();
+        }
+
+        private void RefreshTutorial()
+        {
+            if (helpRoot == null) return;
+            var panel = helpRoot.transform.Find("Panel");
+            if (panel == null) return;
+            var heading = panel.Find("Header")?.GetComponentInChildren<Text>();
+            if (heading != null) heading.text = $"How to Play  {tutorialPage + 1}/5";
+            int rowIndex = 0;
+            foreach (Transform row in panel)
+            {
+                if (row.name != "Row") continue;
+                bool visible = rowIndex++ == 0;
+                row.gameObject.SetActive(visible);
+                if (!visible) continue;
+                var labels = row.GetComponentsInChildren<Text>(true);
+                if (labels.Length >= 2) {
+                    labels[0].text = TutorialTitles[tutorialPage];
+                    labels[1].text = TutorialBodies[tutorialPage];
+                } else if (labels.Length == 1) labels[0].text = TutorialTitles[tutorialPage] + "\n\n" + TutorialBodies[tutorialPage];
+                var icon = row.GetComponentInChildren<Image>();
+                if (icon != null) { UIKit.SetSprite(icon, TutorialIcons[tutorialPage]); icon.color = tutorialPage == 0 ? UIKit.Emerald : Color.white; }
+            }
+            var next = panel.Find("GotIt")?.GetComponentInChildren<Text>();
+            if (next != null) next.text = tutorialPage == 4 ? "LET'S PLAY!" : "NEXT";
         }
 
         // ---------- title ----------
@@ -331,10 +378,10 @@ namespace ParkIt
             HelpRow(panel.transform, "icon_target", UIKit.Emerald, "Park on the <b>green bay</b> facing its arrow before your fuel runs out.");
             HelpRow(panel.transform, "icon_arrow_up", UIKit.Amber, "Use the <b>Drive, Rev, Left and Right</b> buttons to move. Every move burns 1 fuel.");
             HelpRow(panel.transform, "icon_oil", UIKit.Sky, "<b>Oil slicks</b> keep you sliding forward until you reach dry tarmac.");
-            HelpRow(panel.transform, "icon_obstacle", UIKit.Rose, "<b>Fire hydrants</b> block tiles. Shift nodes nudge you diagonally forward.");
-            HelpRow(panel.transform, "icon_keyboard", UIKit.TextSoft, "W/↑ Drive · S/↓ Reverse · A/← Left · D/→ Right · Q/E Shift · U Undo · R Restart · C Camera · Z Zen");
+            HelpRow(panel.transform, "icon_hint_bulb", UIKit.Emerald, "Tap the bulb below Pause for a free hint. The green highlight shows your next control.");
+            HelpRow(panel.transform, "icon_undo", UIKit.TextSoft, "Use Undo to take back a move, or Restart to try again.");
 
-            UIKit.IconTextButton("GotIt", panel.transform, "btn_primary", "icon_check_circle", UIKit.Ink, "Got it!", UIKit.Ink, 30, 96, CloseHelp, 34);
+            UIKit.IconTextButton("GotIt", panel.transform, "btn_primary", "icon_check_circle", UIKit.Ink, "Next", UIKit.Ink, 30, 96, AdvanceTutorial, 34);
             if (helpRoot != null) helpRoot.SetActive(false);
             if (levelCards.Count == 0 && levelGridContent != null)
             {

@@ -33,7 +33,7 @@ namespace ParkIt
 
                 Make(6, "Parallel Parking Dilemma", "Squeeze between barricades into slot", LevelDifficulty.Expert, 6, 6,
                     new Vector2Int(0, 0), Direction.North, new Vector2Int(5, 3), Direction.North, 12,
-                    new[] { V(5, 2), V(5, 4), V(3, 2), V(3, 3), V(1, 4), V(2, 1) }),
+                    new[] { V(5, 4), V(3, 2), V(3, 3), V(1, 4), V(2, 1) }),
 
                 Make(7, "The Skidway Shortcut", "Chained oil slides with obstacle chicanes", LevelDifficulty.Expert, 7, 6,
                     new Vector2Int(0, 0), Direction.East, new Vector2Int(6, 5), Direction.North, 10,
@@ -59,7 +59,7 @@ namespace ParkIt
                     new[] { V(4, 5), V(2, 0), V(2, 1), V(2, 3), V(2, 4), V(4, 2), V(4, 3) }),
 
                 Make(12, "Twisted Ribbon", "Find the openings in three cross lanes", LevelDifficulty.Expert, 7, 7,
-                    V(0, 0), Direction.East, V(6, 6), Direction.North, 19,
+                    V(0, 0), Direction.East, V(6, 6), Direction.North, 21,
                     new[] { V(0, 1), V(1, 1), V(2, 1), V(3, 1), V(4, 1),
                         V(2, 3), V(3, 3), V(4, 3), V(5, 3), V(6, 3),
                         V(0, 5), V(1, 5), V(2, 5), V(3, 5), V(4, 5) }),
@@ -74,7 +74,7 @@ namespace ParkIt
                     new[] { V(1, 0), V(2, 0), V(3, 0), V(6, 1), V(6, 2), V(6, 3) }),
 
                 Make(15, "Sugar Switchbacks", "Change heading at each narrow opening", LevelDifficulty.Master, 7, 7,
-                    V(0, 0), Direction.North, V(6, 6), Direction.East, 19,
+                    V(0, 0), Direction.North, V(6, 6), Direction.East, 21,
                     new[] { V(1, 0), V(1, 1), V(1, 2), V(1, 3), V(1, 4),
                         V(3, 2), V(3, 3), V(3, 4), V(3, 5), V(3, 6),
                         V(5, 0), V(5, 1), V(5, 2), V(5, 3), V(5, 4) }),
@@ -86,7 +86,7 @@ namespace ParkIt
                     new[] { V(0, 2), V(0, 3), V(0, 4), V(2, 6), V(3, 6) }),
 
                 Make(17, "Valet Vault", "Enter the enclosed bay facing West", LevelDifficulty.Master, 7, 6,
-                    V(0, 0), Direction.East, V(5, 4), Direction.West, 10,
+                    V(0, 0), Direction.East, V(5, 4), Direction.West, 12,
                     new[] { V(4, 3), V(5, 3), V(4, 4), V(4, 5), V(5, 5),
                         V(2, 1), V(2, 2), V(2, 3), V(0, 4) }),
 
@@ -97,13 +97,13 @@ namespace ParkIt
                     new[] { V(0, 1), V(0, 2), V(2, 4), V(3, 4), V(5, 5) }),
 
                 Make(19, "Royal Reverse", "Cross the maze and back into the crown bay", LevelDifficulty.Master, 7, 7,
-                    V(0, 0), Direction.East, V(6, 6), Direction.South, 20,
+                    V(0, 0), Direction.East, V(6, 6), Direction.South, 23,
                     new[] { V(1, 0), V(1, 1), V(1, 2), V(1, 3), V(1, 4),
                         V(3, 2), V(3, 3), V(3, 4), V(3, 5), V(3, 6),
                         V(5, 0), V(5, 1), V(5, 2), V(5, 3), V(5, 4), V(5, 6) }),
 
                 Make(20, "Candy Grand Finale", "Master the gates, slides and final heading", LevelDifficulty.Master, 7, 7,
-                    V(0, 0), Direction.North, V(6, 6), Direction.West, 16,
+                    V(0, 0), Direction.North, V(6, 6), Direction.West, 18,
                     new[] { V(1, 0), V(1, 1), V(1, 2), V(1, 3), V(1, 4),
                         V(3, 2), V(3, 3), V(3, 4), V(3, 5), V(3, 6),
                         V(5, 0), V(5, 1), V(5, 2), V(5, 3), V(5, 4) },

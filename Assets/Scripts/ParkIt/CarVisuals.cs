@@ -628,7 +628,10 @@ namespace ParkIt
                 float impactTime = Mathf.Max(.1f, landingDuration) * .55f;
                 if (previousLandingTime < impactTime && landingElapsed >= impactTime &&
                     (ParkItUIManager.Instance == null || !ParkItUIManager.Instance.TitleVisible))
+                {
                     SfxPlayer.Play(Sfx.Landing);
+                    GameplayEffects.For(FindFirstObjectByType<GridManager>())?.Landing(transform.position);
+                }
                 float t = Mathf.Clamp01(landingElapsed / Mathf.Max(.1f, landingDuration));
                 // Short drop, then a small rebound; tyres never sink below the board.
                 hop = t < .55f ? landingHeight * (1f - Mathf.Pow(t / .55f, 2f))
@@ -710,6 +713,13 @@ namespace ParkIt
             landingElapsed = 0f;
             landing = true;
             chassisRoot.localPosition = chassisRestPosition + Vector3.up * landingHeight;
+        }
+
+        public void PlayBlocked(MoveType type)
+        {
+            if (type == MoveType.TurnLeft) rollVelocity = 30f;
+            else if (type == MoveType.TurnRight) rollVelocity = -30f;
+            else pitchVelocity = type == MoveType.Reverse ? -30f : 30f;
         }
 
         public void PlayGameOver()
@@ -825,6 +835,8 @@ namespace ParkIt
 
             bool isCurve = (type == MoveType.TurnLeft || type == MoveType.TurnRight || type == MoveType.ShiftLeft || type == MoveType.ShiftRight);
             Vector3 midpoint = (startPos + targetPos) * 0.5f;
+            float nextOilSample = .1f;
+            var effects = isOilSlip ? GameplayEffects.For(FindFirstObjectByType<GridManager>()) : null;
 
             while (elapsed < duration)
             {
@@ -845,6 +857,11 @@ namespace ParkIt
                 }
 
                 transform.rotation = Quaternion.Slerp(startRot, targetRot, ease);
+                if (isOilSlip && t >= nextOilSample && t < .95f)
+                {
+                    effects?.Oil(transform.position, transform.rotation);
+                    nextOilSample += .18f;
+                }
 
                 if (wheels != null)
                 {

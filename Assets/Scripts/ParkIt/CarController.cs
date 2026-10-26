@@ -44,6 +44,7 @@ namespace ParkIt
 
         public void InitializeCar(LevelData level)
         {
+            StopAllCoroutines();
             SfxPlayer.StopAll();
             if (carVisuals != null) carVisuals.CancelMove();
             IsLevelComplete = false;
@@ -66,20 +67,51 @@ namespace ParkIt
 
         public void RestoreState(Vector2Int coord, Direction direction, int fuel)
         {
+            StopAllCoroutines();
             SfxPlayer.StopAll();
             if (carVisuals != null) carVisuals.ClearColorSparkles();
             if (carVisuals != null) carVisuals.CancelMove();
-            IsBusy = false;
+            GameplayEffects.For(gridManager)?.Clear();
+            GameplayEffects.For(gridManager)?.Rewind(transform, gridManager.CoordToWorldPosition(coord), Quaternion.Euler(0, LevelData.DirectionToEulerY(direction), 0));
+            IsBusy = true;
             IsLevelComplete = false;
             currentCoord = coord;
             currentDirection = direction;
             remainingFuel = fuel;
 
-            transform.position = gridManager.CoordToWorldPosition(currentCoord);
-            transform.rotation = Quaternion.Euler(0, LevelData.DirectionToEulerY(currentDirection), 0);
-
             OnFuelChanged?.Invoke(remainingFuel);
+            gridManager.ClearGhostNodes();
+            OnStateChanged?.Invoke();
+            StartCoroutine(RewindRoutine(gridManager.CoordToWorldPosition(coord), Quaternion.Euler(0, LevelData.DirectionToEulerY(direction), 0)));
+        }
+
+        private System.Collections.IEnumerator RewindRoutine(Vector3 destination, Quaternion rotation)
+        {
+            Vector3 from = transform.position; Quaternion facing = transform.rotation;
+            for (float elapsed = 0; elapsed < .32f; elapsed += Time.deltaTime)
+            {
+                float t = Mathf.SmoothStep(0, 1, elapsed / .32f);
+                transform.SetPositionAndRotation(Vector3.Lerp(from, destination, t), Quaternion.Slerp(facing, rotation, t));
+                yield return null;
+            }
+            transform.SetPositionAndRotation(destination, rotation);
+            IsBusy = false;
             UpdateCandidateMoves();
+        }
+
+        private float lastBlockedTime = -1f;
+        public void RejectMove(MoveType type)
+        {
+            if (IsBusy || IsLevelComplete || remainingFuel <= 0 || Time.time - lastBlockedTime < .25f) return;
+            if (CalculateLegalMoves().Exists(m => m.moveType == type)) return;
+            if (type == MoveType.ShiftLeft || type == MoveType.ShiftRight) return;
+            lastBlockedTime = Time.time;
+            Vector2Int delta = LevelData.DirectionToVector(currentDirection);
+            if (type == MoveType.Reverse) delta = -delta;
+            else if (type == MoveType.TurnLeft || type == MoveType.TurnRight)
+                delta = LevelData.DirectionToVector(LevelData.Turn(currentDirection, type == MoveType.TurnRight));
+            carVisuals?.PlayBlocked(type);
+            GameplayEffects.For(gridManager)?.Blocked(currentCoord + delta);
         }
 
         public List<ValidMoveData> CalculateLegalMoves()
@@ -117,6 +149,8 @@ namespace ParkIt
             }
 
             IsBusy = true;
+            gridManager.GetComponent<BoardEffects>()?.Finish();
+            GameplayEffects.For(gridManager)?.Marker(gridManager.CoordToWorldPosition(move.destination));
             gridManager.ClearGhostNodes();
 
             remainingFuel--;
@@ -146,6 +180,7 @@ namespace ParkIt
             {
                 IsLevelComplete = true;
                 carVisuals?.PlayVictory();
+                GameplayEffects.For(gridManager)?.Parking(transform.position);
                 OnStateChanged?.Invoke();
                 OnLevelWon?.Invoke();
             }

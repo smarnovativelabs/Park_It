@@ -87,7 +87,7 @@ namespace ParkIt
             StatColumn(stats.transform, "MOVES USED", UIKit.TextMain, out victoryMoves, out victoryOptimal);
             StatColumn(stats.transform, "FUEL LEFT", UIKit.Emerald, out victoryFuel, out victoryCapacity);
 
-            var next = UIKit.IconTextButton("Next", vPanel, "btn_green", "icon_play", UIKit.White, "Next Puzzle Level", UIKit.White, 30, 100, OnClickNextLevel, 30);
+            var next = UIKit.IconTextButton("Next", vPanel, "dock_green", "icon_play", UIKit.White, "Next Puzzle Level", UIKit.White, 45, 100, OnClickNextLevel, 30);
             victoryNextLabel = next.GetComponentInChildren<Text>();
             var row = UIKit.Rect("Row", vPanel);
             UIKit.Layout(row, false, 16, null, TextAnchor.MiddleCenter, true);
@@ -160,6 +160,8 @@ namespace ParkIt
             victoryNextLabel.text = custom ? "Back to Level Creator" : "Next Puzzle Level";
             RefreshLevelSelect();
             UIPopupTransition.Show(victoryRoot);
+            var reward = victoryRoot.GetComponent<VictoryStarFeedback>() ?? victoryRoot.AddComponent<VictoryStarFeedback>();
+            reward.Play(victoryStarTiles, victoryStarIcons, stars);
         }
 
         private void PopulateDefeat()
